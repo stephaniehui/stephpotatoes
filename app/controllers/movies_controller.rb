@@ -9,24 +9,14 @@ class MoviesController < ApplicationController
   def index
 
     @movies = Movie.all
-    sort = params[:sort] #|| session[:sort]
+    sort = params[:sort] || session[:sort]
 
     @all_ratings = Movie.all_ratings
-    @selected_ratings = params[:ratings] || {}#|| session [:ratings] 
+    @selected_ratings = params[:ratings] || session[:ratings] || {}
+    
 
-=begin
-    if params[:sort] != session[:sort]
-      session[:sort] = sort
-      redirect_to :sort => sort, :ratings => @selected_ratings and return 
-    end
 
-    if params[:ratings] != session[:ratings] and @selected_ratings != {}
-      session[:sort] = sort
-      session[:ratings] = @selected_ratings
-      redirect_to :sort => sort, :ratings => @selected_ratings and return 
-    end
-=end
-    if @selected_ratings == {}
+    if @selected_ratings == {} 
       @movies = Movie.all
       case sort
       when 'title'
@@ -50,6 +40,19 @@ class MoviesController < ApplicationController
         @movies = @movies.all(:order => :release_date)
         #ordering,@release_date_header = {:order => :release_date}, 'hilite'
       end
+    end
+
+
+
+    if params[:sort] != session[:sort]
+      session[:sort] = sort
+      redirect_to :sort => sort, :ratings => @selected_ratings and return 
+    end
+
+    if params[:ratings] != session[:ratings] and @selected_ratings != {}
+      session[:sort] = sort
+      session[:ratings] = @selected_ratings
+      redirect_to :sort => sort, :ratings => @selected_ratings and return 
     end
   end
 

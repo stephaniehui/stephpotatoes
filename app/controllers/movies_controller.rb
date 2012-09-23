@@ -26,6 +26,7 @@ class MoviesController < ApplicationController
 
 
     if @selected_ratings == {} 
+      @selected_ratings = @all_ratings
       @movies = Movie.all
       case sort
       when 'title'
